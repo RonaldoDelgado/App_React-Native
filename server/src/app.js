@@ -1,0 +1,20 @@
+import express from "express";
+import morgan from "morgan";
+import http from "http";
+import cors from "cors";
+import router from "./routes/index.js";
+import { createRoles } from "./libs/initialRole.js";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+
+const app = express();
+createRoles();
+app.use(cors({ origin: "*" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(cookieParser());
+app.use(morgan("dev"));
+app.use(express.json());
+app.use("/", router);
+const server = http.createServer(app);
+export default server;
